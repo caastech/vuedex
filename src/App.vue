@@ -1,30 +1,48 @@
 <template>
-  <div id="nav">
+  <!-- <div id="nav">
     <router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link>
+  </div> -->
+  <!-- <router-view/> -->
+  <div class="container">
+  <Header/>
+  <SearchBar/>
   </div>
-  <router-view/>
+
 </template>
 
+<script>
+import Header from '@/components/Header' 
+import SearchBar from '@/components/SearchBar' 
+
+export default {
+  name: 'App',
+
+  components: {
+    Header,
+    SearchBar,
+  }
+}
+</script>
 <style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
 }
 
-#nav {
-  padding: 30px;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
 }
+
+.container {
+  display: grid;
+  place-items: center;
+  padding: 10px;
+}
+
 </style>
