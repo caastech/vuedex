@@ -3,8 +3,8 @@
         <div class="profile-title">
             <h3>{{ 'title' }}</h3>
         </div>
-        <div class="profile-content">
-            <p> {{ 'effect' }} </p>
+        <div v-if="details.length !== 0" class="profile-content">
+            <p> {{ details[0].name }} </p>
         </div>
 
     </div>
@@ -13,6 +13,9 @@
 <script>
     export default {
         name: 'Profile',
+        props: {
+            details: Array,
+        }
     }
 </script>
 

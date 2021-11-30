@@ -1,9 +1,6 @@
 <template>
     <div class="table">
-        <!-- <div v-for="food in foodList" class="item">
-            {{ food }}
-        </div> -->
-        <Profile/>
+        <Profile :details="pokeProfile"/>
     </div>
 </template>
 
@@ -15,8 +12,7 @@
         
         data() {
             return {
-                // foodList: ['salt','apple','pizza','pasta','hamburger','bread','cake',],
-
+                pokeProfile: [],
             }
         },
 
@@ -31,14 +27,26 @@
         methods: {
             setPokeDetails(urls) {
 
-                urls.forEach(async (pokemon,id) => {
+                // Loop through every pokemon from url
+                urls.forEach((pokemon,id) => {
 
-                    let rawPokemon = await fetch(pokemon);
-                    let currentPokemon = await rawPokemon.json();
-                    console.log(`Poke ${id}:`,`${currentPokemon.name}/${currentPokemon.abilities}/${currentPokemon.types}`);
-                    // name,types,abilities(first,second,hidden)
+                    // Get data from api with promise structure
+                    fetch(pokemon)
+                        .then(rawPokemon => {
+                            return rawPokemon.json();
+                        })
+                        .then(currentPokemon => {
+                            
+                            // Filled pokemon profile with every pokemon's data
+                            this.pokeProfile.push({
+                                name: currentPokemon.name,
+                                abilities: currentPokemon.abilities,
+                                types: currentPokemon.types,
+                            })
+                        })
+                        .catch(error => console.error('This one:',error))
                 });
-                // const apiUrls = fetch(urls)
+
             }
         },
 
