@@ -37,7 +37,6 @@
         // console.log('Emitted:', data);
         this.cardContent = { ...dexItem }
 
-        console.log(this.cardContent);
       }
     },
   }

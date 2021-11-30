@@ -42,7 +42,7 @@ export default {
 
                 const rawSearch = await fetch(`${this.API}/${type}/${formattedLook}`);
                 const jsonSearch = await rawSearch.json();
-                
+                console.log(jsonSearch);
                 // Get last element of the array of flavor text 
                 const flavorText = jsonSearch.flavor_text_entries.reverse().find((item) => {
                     return item.language.name == 'en';
@@ -55,12 +55,18 @@ export default {
     
                 });
 
+                // Get the url of every pokemon who has the current ability 
+                const pokemonList = jsonSearch.pokemon.map((pokeItem) => {
+                    return pokeItem.pokemon.url;
+                })
+
                 // console.log('Effect:',effectEntry.effect);
                 // console.log('Flavor:',flavorText.flavor_text);
     
                 this.ability = {
                     title: flavorText.flavor_text,
-                    effect: effectEntry.effect
+                    effect: effectEntry.effect,
+                    pokemon: pokemonList,
                 }
 
                 this.$emit('dex-data',this.ability);

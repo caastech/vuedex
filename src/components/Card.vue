@@ -1,41 +1,48 @@
 <template>
-    <div class="card">
+    <div v-show="title" class="card">
         <div class="card-title">
             <h3>{{ title }}</h3>
         </div>
         <div class="card-content">
             <p> {{ effect }} </p>
         </div>
+        <CardList :urls="dexContent.pokemon" />
 
     </div>
 </template>
 
 <script>
-export default {
-    name: 'Card',
-    
-    props: {
-        dexContent: Object,
-    },
+    import CardList from '@/components/CardList';
 
-    data() {
-        return {
-            
-        }
-    },
-    
-
-    computed: {
-        title() {
-            return this.dexContent.title;
+    export default {
+        name: 'Card',
+        
+        components: {
+            CardList,
         },
 
-        effect() {
-            return this.dexContent.effect;
-        }
-    }
+        props: {
+            dexContent: Object,
+        },
 
-}
+        data() {
+            return {
+                
+            }
+        },
+        
+
+        computed: {
+            title() {
+                return this.dexContent.title;
+            },
+
+            effect() {
+                return this.dexContent.effect;
+            }
+        }
+
+    }
 </script>
 
 <style lang="scss" scoped>
