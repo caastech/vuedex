@@ -21,6 +21,7 @@ export default {
             search: '',
             API: 'https://pokeapi.co/api/v2',
             ability: {},
+            pokeProfiles: [],
         }
     },
 
@@ -34,6 +35,9 @@ export default {
 
     methods: {
         async getDexData(look,type) {
+
+            this.pokeProfiles = [];
+
             // Formatted search word to match api form
             const formattedLook = look.toLowerCase().trim().replace(' ','-')
             
@@ -66,10 +70,9 @@ export default {
                 this.ability = {
                     title: flavorText.flavor_text,
                     effect: effectEntry.effect,
-                    pokemon: pokemonList,
                 }
 
-                this.$emit('dex-data',this.ability);
+                this.setPokeDetails(pokemonList);
 
             } catch (error) {
                 console.error('Error',error)
@@ -77,7 +80,40 @@ export default {
             }
             
 
-        }
+        },
+
+        setPokeDetails(urls) {
+
+            // Loop through every pokemon from url
+            urls.forEach((pokemon,id) => {
+
+                // Get data from api with promise structure
+
+                fetch(pokemon)
+                    .then(rawPokemon => {
+                        return rawPokemon.json();
+                    })
+                    .then(currentPokemon => {
+                        
+                        // Filled pokemon profile with needed pokemon's data
+                        this.pokeProfiles.push({
+                            name: currentPokemon.name,
+                            abilities: currentPokemon.abilities,
+                            types: currentPokemon.types,
+                            sprite: currentPokemon.sprites.front_default,
+                        })
+
+                    })
+                    .catch(error => console.error('This one:',error))
+            });
+            
+            this.$emit('dex-data',{ability: this.ability, profile: this.pokeProfiles});
+            
+        },
+
+        // showMe(){
+        //     console.log('Hello Brother');
+        // }
     }
 
 

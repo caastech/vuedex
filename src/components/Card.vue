@@ -6,7 +6,7 @@
         <div class="card-content">
             <p> {{ effect }} </p>
         </div>
-        <CardList :urls="dexContent.pokemon" />
+        <CardList :profilesData="profiles" />
 
     </div>
 </template>
@@ -22,23 +22,27 @@
         },
 
         props: {
-            dexContent: Object,
+            ability: Object,
+            profiles: Object,
         },
 
         data() {
             return {
-                
+                // show(ability,profile) {
+                //     console.log(ability);
+                //     console.log(profile);
+                // }
             }
         },
         
 
         computed: {
             title() {
-                return this.dexContent.title;
+                return this.ability.title;
             },
 
             effect() {
-                return this.dexContent.effect;
+                return this.ability.effect;
             }
         }
 

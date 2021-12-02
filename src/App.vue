@@ -7,7 +7,7 @@
   <div class="container">
     <Header/>
     <SearchBar @dex-data="setValues" type="ability"/>
-    <Card :dexContent="cardContent"/>
+    <Card :ability="abilityContent" :profiles="profileContent['content']"/>
   </div>
 
 </template>
@@ -22,7 +22,8 @@
 
     data() {
       return{
-        cardContent: {}
+        abilityContent: {},
+        profileContent: [],
       }
     },
 
@@ -33,9 +34,12 @@
     },
 
     methods: {
-      setValues(dexItem) {
-        // console.log('Emitted:', data);
-        this.cardContent = { ...dexItem }
+      setValues({ability,profile}) {
+
+        // Set ability and profiles data
+        this.abilityContent = { ...ability }
+        this.profileContent['content'] = profile
+
 
       }
     },

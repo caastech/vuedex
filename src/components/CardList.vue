@@ -1,6 +1,10 @@
 <template>
     <div class="table">
-        <Profile :details="pokeProfile"/>
+        
+        <div class="item" v-for="profile in profilesData">
+            <Profile :details="profile"/>
+        </div>
+            
     </div>
 </template>
 
@@ -12,12 +16,11 @@
         
         data() {
             return {
-                pokeProfile: [],
             }
         },
 
         props: {
-            urls: Array,
+            profilesData: Array,
         },
 
         components: {
@@ -25,34 +28,13 @@
         },
 
         methods: {
-            setPokeDetails(urls) {
+            showMe(){
+                console.log('Here we are');
+            },
 
-                // Loop through every pokemon from url
-                urls.forEach((pokemon,id) => {
 
-                    // Get data from api with promise structure
-                    fetch(pokemon)
-                        .then(rawPokemon => {
-                            return rawPokemon.json();
-                        })
-                        .then(currentPokemon => {
-                            
-                            // Filled pokemon profile with every pokemon's data
-                            this.pokeProfile.push({
-                                name: currentPokemon.name,
-                                abilities: currentPokemon.abilities,
-                                types: currentPokemon.types,
-                            })
-                        })
-                        .catch(error => console.error('This one:',error))
-                });
-
-            }
+        
         },
-
-        updated() {
-            this.setPokeDetails(this.urls);
-        }
 
     }
 </script>
