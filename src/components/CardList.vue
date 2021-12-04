@@ -28,12 +28,6 @@
         },
 
         methods: {
-            showMe(){
-                console.log('Here we are');
-            },
-
-
-        
         },
 
     }
@@ -42,11 +36,14 @@
 <style lang="scss" scoped>
     .table {
         display: grid;
+        gap:5px;
+        
         grid-template-columns: repeat(4,1fr);
     
         .item {
-            border: 1px solid black;
-
+            background-color: white;
+            border-radius: 6px ;
+            overflow: hidden;
         }
     }
     
