@@ -6,8 +6,8 @@
   <!-- <router-view/> -->
   <div class="container">
     <Header/>
-    <SearchBar @dex-data="setValues" type="ability"/>
-    <Card :ability="abilityContent" :profiles="profileContent['content']"/>
+    <SearchBar @dex-data="setValues" />
+    <Card :searchData="selectedContent" :profiles="profileContent['content']" :type="typeContent"/>
   </div>
 
 </template>
@@ -22,8 +22,9 @@
 
     data() {
       return{
-        abilityContent: {},
+        selectedContent: {},
         profileContent: [],
+        typeContent: '',
       }
     },
 
@@ -34,12 +35,22 @@
     },
 
     methods: {
-      setValues({ability,profile}) {
+      setValues({selectedData,profile,type}) {
 
-        // Set ability and profiles data
-        this.abilityContent = { ...ability }
-        this.profileContent['content'] = profile
+        if(profile){
+          
+          // Set selected and profiles data
+          this.selectedContent = { ...selectedData };
+          this.profileContent['content'] = profile;
+          this.typeContent = type;
 
+        } else {
+
+          // Set selected and profiles data for pokemon search
+          this.selectedContent = { ...selectedData };
+          this.typeContent = type;
+
+        }
 
       }
     },

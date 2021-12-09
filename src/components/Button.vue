@@ -1,5 +1,6 @@
 <template>
-    <button>{{ title }}</button>
+    <!-- :class="{'btn-selected' : isSelected}" -->
+    <button class="btn">{{ title }}</button>
 </template>
 
 <script>
@@ -12,9 +13,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    button {
+    @import '@/assets/scss/_setup.scss';
+
+    .btn {
         padding: 12px 14px;
         border: none;
         border-radius: 0px;
+    }
+
+    .btn-selected {
+        background-color: $dex-black;
     }
 </style>
