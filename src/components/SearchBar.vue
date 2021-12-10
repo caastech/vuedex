@@ -135,9 +135,9 @@ export default {
                 }
 
             } catch (error) {
-                console.error('Error',error);
-                console.log(this.selectedSearch);
-                return alert(`This ${type} cannot be found, please check spelling...`);
+                // console.error('Error',error);
+                this.$emit('deploy-error',{err: error,type: this.type})
+                // return alert(`This ${type} cannot be found, please check spelling...`);
                 
             }
             

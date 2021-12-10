@@ -5,9 +5,19 @@
   </div> -->
   <!-- <router-view/> -->
   <div class="container">
-    <Header/>
-    <SearchBar @dex-data="setValues" />
-    <Card :searchData="selectedContent" :profiles="profileContent['content']" :type="typeContent"/>
+    
+    <div class="container-">
+
+      <Header/>
+      <SearchBar @dex-data="setValues" @deploy-error="displayError" />
+      <Card :searchData="selectedContent" :profiles="profileContent['content']" :type="typeContent"/>
+      
+    </div>
+   <!-- Must fixed error div staying even after solving search -->
+    <div v-if="error" class="container-error">
+        <h2 v-html="error"></h2>
+    </div>
+
   </div>
 
 </template>
@@ -25,6 +35,7 @@
         selectedContent: {},
         profileContent: [],
         typeContent: '',
+        error: '',
       }
     },
 
@@ -52,6 +63,11 @@
 
         }
 
+      },
+
+      displayError({err, type}){
+        console.error('Error at SearhBar:',err,type);
+        this.error = `Error 404: this <span>${type}</span> was not found, please check spelling`;
       }
     },
   }
@@ -80,6 +96,23 @@
     display: grid;
     // place-items: center;
     padding: 10px;
+
+    &-error {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 6px;
+      
+      display: flex;
+      justify-content: center;
+
+      background-color: lighten($dex-red, 16);
+      color: $dex-black;
+
+      span {
+        color: $dex-white;
+        font-weight: bold;
+      }
+    }
   }
 
 </style>
