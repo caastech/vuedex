@@ -90,8 +90,83 @@
             </details>
         </div>
 
-        <div v-else-if="type == 'pokemon'" class="card-pokemon">
-            <h2>{{ searchData.name }}</h2>
+        <div v-else-if="type == 'pokemon'" class="pokemon">
+            <div class="pokemon-profile">
+                <div class="pokemon-profile-img">
+
+                    <img :src="searchData.sprites.front_default" :alt="searchData.name"/>
+
+                </div>
+
+                <div class="pokemon-profile-data">
+                    <div class="pokemon-profile-data-types">
+
+                        <!-- Types -->
+                        <p v-for="type in searchData.types" class="types" 
+                        :style="{backgroundColor: typeColors[type.type.name]}">
+                        {{ type.type.name }} </p>
+
+                    </div>
+
+                    <div class="pokemon-profile-data-abilities">
+                        <!-- Abilities -->
+                        <div class="title">
+                            <h3>Abilities</h3>
+                        </div>
+
+                        <div class="abilities">
+                            
+                            <div v-for="(ability,key) in searchData.abilities" class="ability"> 
+                                <p v-if="ability.is_hidden"> Hidden </p>
+                                <p v-else> Ability {{key + 1}} </p>
+                                
+                                <p> {{ ability.ability.name }} </p>
+
+
+                                    
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <table class="pokemon-profile-data-table">
+                        <tbody>
+                            <!-- Species -->
+                            <tr>
+                                <td>Species</td>
+                                <!-- url -> search -> genera -> language == 'en' -->
+                                <td>{{ species }}</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="pokemon-details">
+                <summary>Base Stats</summary>
+
+                <table class="pokemon-profile-stats">
+                    <tr v-for="stat in searchData.stats">
+                        <td>{{ stat.stat.name }}</td>
+                        <td>{{ stat.base_stat }}</td>
+                    </tr>
+                </table>
+
+            </div>
+
+            <div class="pokemon-moves">
+
+                <details>
+                        <summary>Moves</summary>
+                        <ul>
+                            <li v-for="move in searchData.moves">
+                                {{ move.move.name }}
+                            </li>
+                        </ul>
+                </details>
+
+            </div>
         </div>
 
     </div>
@@ -116,10 +191,46 @@
 
         data() {
             return {
-                // show(selectedData,profile) {
-                //     console.log(selectedData);
-                //     console.log(profile);
-                // }
+                typeColors: {
+                    // Normal 
+                    'normal':'#a8a878',
+                    // Fire
+                    'fire': '#f08030',
+                    // Water
+                    'water': '#6890f0',
+                    // Grass
+                    'grass': '#78c850',
+                    // Flying
+                    'flying': '#a890f0',
+                    // Fighting
+                    'fighting': '#c03028',
+                    // Poison
+                    'poison': '#a040a0',
+                    // Electric
+                    'electric': '#f8d030',
+                    // Ground
+                    'ground': '#e0c068',
+                    // Rock
+                    'rock': '#b8a038',
+                    // Psychic
+                    'psychic': '#f85888',
+                    // Ice
+                    'ice': '#98d8d8',
+                    // Bug
+                    'bug': '#a8b820',
+                    // Ghost
+                    'ghost': '#705898',
+                    // Steel
+                    'steel': '#b8b8d0',
+                    // Dragon
+                    'dragon': '#7038f8',
+                    // Dark
+                    'dark': '#705848',
+                    // Fairy
+                    'fairy': '#ee99ac',
+                },
+
+                species: '',
             }
         },
         
@@ -150,10 +261,29 @@
 
                 effect.short_effect = effect.short_effect.replace('$effect_chance',this.searchData.effect_chance)  
                 return effect.short_effect;
+            },
+
+            
+
+
+        },
+
+        updated() {
+            if(this.type == 'pokemon') {
+
+                let speciesUrl = this.searchData.species.url;
+                fetch(speciesUrl)
+                
+                .then(rawUrl => rawUrl.json())
+                
+                .then(result => {
+                    let species = result.genera.find(name => name.language.name == 'en');
+                    console.log('data',species.genus);
+                    this.species = species.genus;
+                })
+                .catch(err => console.log(err));
             }
-
-
-        }
+        },
 
     }
 </script>
@@ -175,7 +305,7 @@
             font-weight: bold;
         }
 
-        .move{
+        .move {
             &-details {
                 
                 display: grid;
@@ -214,6 +344,125 @@
                         }
                     }
                 }
+            }
+
+        }
+
+        .pokemon {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+
+            &-profile {
+                display: grid;
+                grid-template-columns: 1fr;
+                justify-items: center;
+                &-img {
+
+                    display: flex;
+                    justify-content: center;
+                    
+                    background-color: $dex-white;
+                    width: 40vh;
+                
+                    img {
+                        width: 60%;
+                    }
+
+                }
+
+                &-data {
+                    width: 90%;
+
+                    &-types {
+                        display: flex;
+                        justify-content: center;
+                        column-gap: 10px;
+                        margin: 10px 0px;
+
+                        p {
+                            text-shadow: 1px 1px 1px $dex-black;
+                            padding: 2px 8px;
+                            margin-bottom: 4px;
+                            border-radius: 25px;
+                            width: 35%;
+                            text-align: center;
+                            color: white;
+                        }
+                    }
+
+                    &-abilities {
+                        // border: 1px solid $dex-black;
+                        margin-bottom: 10px;
+
+                        .title {
+                            background-color: $dex-black;
+                            border-radius: 0 6px 6px 0;
+                            padding: 6px;
+                            color: $white;
+
+                            text-align: center;
+                        }
+                        .abilities {
+
+                            .ability {
+                                display: flex;
+                                justify-content: space-between;
+                                background-color: $dex-white;
+                                border-radius: 6px;
+                                margin: 6px 0px;
+
+                                p {
+                                    padding: 4px;
+                                    min-width: 68px;
+                                }
+
+                                p:nth-child(1) {
+                                    background: $dex-black;
+                                    color: $white;
+                                }
+
+                                p:nth-child(2) {
+                                    margin: 0px 10px;
+                                }
+                            }
+                        }
+                    }
+
+                    &-table {
+                        width: 100%;
+                        // border: 2px solid $dex-white;
+                        
+                        tr {
+                            border-radius: 50px;
+                        }
+
+                        td {
+                            background-color: $dex-white;
+                            border-radius: 10px 0 0 10px;
+                            padding: 6px;
+
+                        }
+
+                        td:nth-child(2) {
+                            border-radius: 0 10px 10px 0;
+                            color: red;
+                            text-align: center;
+                        }
+                    }
+                }
+
+                
+                
+                &-stats {
+                    width: 100%;
+                    
+                    td:nth-child(2) {
+                        color: red;
+                        text-align: right;
+                    }
+
+                }
+
             }
 
         }

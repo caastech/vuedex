@@ -25,7 +25,7 @@ export default {
             API: 'https://pokeapi.co/api/v2',
             selectedSearch: {},
             pokeProfiles: [],
-            type:'ability',
+            type:'pokemon',
         }
     },
 
