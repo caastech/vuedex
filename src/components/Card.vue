@@ -148,8 +148,12 @@
 
                 <table class="pokemon-profile-stats">
                     <tr v-for="stat in searchData.stats">
-                        <td>{{ stat.stat.name }}</td>
-                        <td>{{ stat.base_stat }}</td>
+                        <td>{{ stat.name }}</td>
+                        
+                        <td>
+                            <h4>{{stat.value}}</h4>
+                            <div class="bar" :style="{ width: (stat.value*100)/255 + '%', backgroundColor: (stat.value > average) ? 'green' : 'grey'}"></div>
+                        </td>
                     </tr>
                 </table>
 
@@ -263,8 +267,13 @@
                 return effect.short_effect;
             },
 
-            
-
+            average(){
+                let avg = 0
+                let sum = this.searchData.stats.map(num => num.value)
+                sum.forEach(num => {avg = avg + num})
+                avg = Math.floor(avg/sum.length);
+                return avg
+            },
 
         },
 
@@ -457,9 +466,16 @@
                     width: 100%;
                     
                     td:nth-child(2) {
-                        color: red;
-                        text-align: right;
+                        // background-color: red;
+                        // text-align: right;
+                        width: 80%;
+                    
+                        .bar{
+                            height: 20px;
+                            border-radius: 5px;
+                        }
                     }
+
 
                 }
 

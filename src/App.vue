@@ -66,7 +66,7 @@
       },
 
       displayError({err, type}){
-        console.error('Error at SearhBar:',err,type);
+        console.error('Error at SearchBar:',err,type);
         this.error = `Error 404: this <span>${type}</span> was not found, please check spelling`;
       }
     },

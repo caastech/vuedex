@@ -20,7 +20,7 @@
                 <table>
                     <tr v-for="ability,index in details.abilities">
                         <td> {{ (index == 0) ? 'Ab.1' : (index == 1) ? 'Ab.2' : 'Hidden' }} </td>
-                        <td> {{ ability.ability.name }} </td> 
+                        <td> {{ ability }} </td> 
                     </tr>
                 </table>
             </div>
@@ -29,6 +29,8 @@
 </template>
 
 <script>
+    import capitalCase from '@/services/TextFormatter.js';
+
     export default {
         name: 'Profile',
 
@@ -81,14 +83,7 @@
 
         computed: {
             name() {
-                let nameText = this.details.name;
-
-                nameText = nameText.replace('-',' ')
-                .split(' ')
-                .map(w => w[0].toUpperCase() + w.substr(1).toLowerCase())
-                .join(' ');
-                    
-                return nameText;
+                return this.details.name;
             },
 
         }

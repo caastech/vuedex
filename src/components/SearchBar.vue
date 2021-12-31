@@ -15,6 +15,7 @@
 
 <script>
 import Button from '@/components/Button'
+import capitalCase from '@/services/TextFormatter.js'
 
 export default {
     name: 'SearchBar',
@@ -34,13 +35,6 @@ export default {
     },
 
     methods: {
-
-        callMe(event){
-            console.log('Soup', event.target);
-
-            event.target.isSelected = msg;
-            // this.isSelected = !this.isSelected;
-        },
 
         async getDexData(look,type) {
 
@@ -84,7 +78,6 @@ export default {
                         title: flavorText.flavor_text,
                         effect: effectEntry.effect,
                     }
-
                     this.setPokeDetails(pokemonList);
                 }
 
@@ -117,15 +110,28 @@ export default {
                 }
 
                 else if(type == 'pokemon') {
+                    // Set array with capital case stats names
+                    let statsNames = jsonSearch.stats.map(stat => capitalCase(stat.stat.name));
+                    // Set array with stats values 
+                    let statsValues = jsonSearch.stats.map(stat => stat.base_stat);
+
+                    let stats = []
+
+                    // Loop to add object with stat name and proper value to stats array
+                    for (let index = 0; index < statsNames.length; index++) {
+                        stats.push({name: statsNames[index], value: statsValues[index]})
+                    }
                     //     name: ,
                     //     types:,
                     //     abilities:,
                     //     sprites:,
                     //     moves:,
                     //     stats:,
+                    console.log('Pokemon',typeof statsValues[0]);
 
                     this.selectedSearch = {
-                        ...jsonSearch
+                        ...jsonSearch,
+                        stats: stats
                     }
                     // console.log(this.selectedSearch);
                     // Add son sort of emit like this.$emit(poke-search, data) 
@@ -156,11 +162,14 @@ export default {
                         return rawPokemon.json();
                     })
                     .then(currentPokemon => {
-                        
+
+                        // Changed abilities to uppercase and removed '-' separator
+                        const pokemonAbilities = currentPokemon.abilities.map(ability => capitalCase(ability.ability.name))
+                        const pokemonName = capitalCase(currentPokemon.name)
                         // Filled pokemon profile with needed pokemon's data
                         this.pokeProfiles.push({
-                            name: currentPokemon.name,
-                            abilities: currentPokemon.abilities,
+                            name: pokemonName,
+                            abilities: pokemonAbilities,
                             types: currentPokemon.types,
                             sprite: currentPokemon.sprites.front_default,
                         })
