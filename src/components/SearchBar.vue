@@ -47,10 +47,9 @@ export default {
             
             // Fetch data and parsed as JSON
             try {
-
                 const rawSearch = await fetch(`${this.API}/${type}/${formattedLook}`);
                 const jsonSearch = await rawSearch.json();
-                console.log(jsonSearch);
+                // console.log(jsonSearch);
 
                 if(type == 'ability') {
 
@@ -115,6 +114,9 @@ export default {
                     // Set array with stats values 
                     let statsValues = jsonSearch.stats.map(stat => stat.base_stat);
 
+                    // Set array with capital case ability names
+                    let abilities = jsonSearch.abilities.map(ability => capitalCase(ability.ability.name));
+
                     let stats = []
 
                     // Loop to add object with stat name and proper value to stats array
@@ -127,11 +129,12 @@ export default {
                     //     sprites:,
                     //     moves:,
                     //     stats:,
-                    console.log('Pokemon',typeof statsValues[0]);
+                    // console.log('Pokemon',typeof statsValues[0]);
 
                     this.selectedSearch = {
                         ...jsonSearch,
-                        stats: stats
+                        stats: stats,
+                        abilities: abilities,
                     }
                     // console.log(this.selectedSearch);
                     // Add son sort of emit like this.$emit(poke-search, data) 

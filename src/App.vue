@@ -45,13 +45,18 @@
       Card,
     },
 
+    beforeUpdate() {
+      this.error = '';
+    },
     methods: {
       setValues({selectedData,profile,type}) {
-
+        
         if(profile){
           
           // Set selected and profiles data
-          this.selectedContent = { ...selectedData };
+          this.selectedContent = {
+            ...selectedData, 
+          };
           this.profileContent['content'] = profile;
           this.typeContent = type;
 
@@ -70,6 +75,8 @@
         this.error = `Error 404: this <span>${type}</span> was not found, please check spelling`;
       }
     },
+
+
   }
 
 

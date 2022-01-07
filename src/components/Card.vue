@@ -120,10 +120,7 @@
                                 <p v-if="ability.is_hidden"> Hidden </p>
                                 <p v-else> Ability {{key + 1}} </p>
                                 
-                                <p> {{ ability.ability.name }} </p>
-
-
-                                    
+                                <p> {{ ability }} </p>
                             </div>
 
                         </div>
@@ -152,7 +149,7 @@
                         
                         <td>
                             <h4>{{stat.value}}</h4>
-                            <div class="bar" :style="{ width: (stat.value*100)/255 + '%', backgroundColor: (stat.value > average) ? 'green' : 'grey'}"></div>
+                            <div class="bar" :style="{ width: (stat.value*100)/255 + '%', backgroundColor: (stat.value > average) ? '#4EA459' : 'grey'}"></div>
                         </td>
                     </tr>
                 </table>
@@ -162,12 +159,12 @@
             <div class="pokemon-moves">
 
                 <details>
-                        <summary>Moves</summary>
-                        <ul>
-                            <li v-for="move in searchData.moves">
-                                {{ move.move.name }}
-                            </li>
-                        </ul>
+                    <summary>Moves</summary>
+                    <div class="moves-grid">
+                        <div v-for="name in movesNames">
+                            {{ name }}
+                        </div>
+                    </div>
                 </details>
 
             </div>
@@ -179,6 +176,7 @@
 
 <script>
     import CardList from '@/components/CardList';
+    import capitalCase from '@/services/TextFormatter.js';
 
     export default {
         name: 'Card',
@@ -275,6 +273,12 @@
                 return avg
             },
 
+            movesNames(){
+                const names = this.searchData.moves.map(name => capitalCase(name.move.name))
+                // console.log(this.searchData.moves);
+                return names;
+            },
+
         },
 
         updated() {
@@ -287,7 +291,7 @@
                 
                 .then(result => {
                     let species = result.genera.find(name => name.language.name == 'en');
-                    console.log('data',species.genus);
+                    // console.log('data',species.genus);
                     this.species = species.genus;
                 })
                 .catch(err => console.log(err));
@@ -327,26 +331,28 @@
                 }
 
                 &-stats {
-                    background: lighten($dex-red,30);
                     border-radius: 6px;
 
                     table {
                         width: 100%;
                         background: $dex-white;
+                        border-radius:10px;
+                        padding:10px;
                         // border-collapse: collapse;
 
                         td {
-                            padding: 4px;
-                            border: 1px solid black;
+                            padding: 6px;
+                            // border: 1px solid black;
                         }
                         tr:nth-child(1), tr:nth-child(2)  {
                             td {
-
-                                color: $dex-blue;
+                                color: $white;
+                                background: darken($dex-blue, 10);
                                 border-radius: 10px;
                             }
                         }
                         td:nth-child(2){
+                            border-radius: 10px;
                             text-align: right;
                             background: $dex-black;
                             color: $white;
@@ -360,6 +366,7 @@
         .pokemon {
             display: grid;
             grid-template-columns: 1fr 1fr;
+            column-gap:10px;
 
             &-profile {
                 display: grid;
@@ -380,7 +387,7 @@
                 }
 
                 &-data {
-                    width: 90%;
+                    width: 100%;
 
                     &-types {
                         display: flex;
@@ -479,6 +486,24 @@
 
                 }
 
+            }
+
+            &-moves {
+                .moves-grid {
+                    display:grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 10px;
+                    div {
+                        background: $white;
+                        border-radius: 50px;
+                        text-align: center;
+                    }
+
+                    div:hover {
+                        background: $dex-black;
+                        color: $white;
+                    }
+                }
             }
 
         }
