@@ -9,7 +9,10 @@
             <Button @click="type='pokemon'" title="Pokemon"/>
         </div>
         <input type="text" v-model='search' @change="getDexData(search,type)" placeholder="Search here...">
-        
+        <!-- Must fixed error div staying even after solving search -->
+        <div v-if="error" class="error">
+            <h2 v-html="error"></h2>
+        </div>
     </main>
 </template>
 
@@ -27,6 +30,7 @@ export default {
             selectedSearch: {},
             pokeProfiles: [],
             type:'pokemon',
+            error:'',
         }
     },
 
@@ -47,6 +51,7 @@ export default {
             
             // Fetch data and parsed as JSON
             try {
+                this.error= ''
                 const rawSearch = await fetch(`${this.API}/${type}/${formattedLook}`);
                 const jsonSearch = await rawSearch.json();
                 // console.log(jsonSearch);
@@ -144,8 +149,8 @@ export default {
                 }
 
             } catch (error) {
-                // console.error('Error',error);
-                this.$emit('deploy-error',{err: error,type: this.type})
+                // console.error('Error Macaco:',this.type);
+                this.displayError(error,this.type)
                 // return alert(`This ${type} cannot be found, please check spelling...`);
                 
             }
@@ -185,9 +190,9 @@ export default {
             
         },
 
-        // showMe(){
-        //     console.log('Hello Brother');
-        // }
+        displayError(err, type){
+        this.error = `Error 404: this <span>${type}</span> was not found, please check spelling`;
+      }
     }
 
 
@@ -195,6 +200,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+    @import '@/assets/scss/_setup.scss';
+
     input {
         width: 100%;
         height: 8vh;
@@ -205,5 +212,17 @@ export default {
         justify-content: center;
         gap: 12px
 
+    }
+
+    .error {
+        margin-top: 10px;
+        padding: 10px;
+        border-radius: 6px;
+        
+        display: flex;
+        justify-content: center;
+
+        background-color: lighten($dex-red, 16);
+        color: $dex-black;
     }
 </style>   
